@@ -1,0 +1,306 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.itheima.mapper.TbExceptionMsgMapper" >
+  <resultMap id="BaseResultMap" type="com.itheima.domain.TbExceptionMsg" >
+    <id column="message_id" property="messageId" jdbcType="INTEGER" />
+    <result column="period_id" property="periodId" jdbcType="INTEGER" />
+    <result column="exception_desc" property="exceptionDesc" jdbcType="VARCHAR" />
+    <result column="exception_reason" property="exceptionReason" jdbcType="VARCHAR" />
+    <result column="resolve_way" property="resolveWay" jdbcType="VARCHAR" />
+    <result column="relate_pic" property="relatePic" jdbcType="VARCHAR" />
+    <result column="usable_flag" property="usableFlag" jdbcType="INTEGER" />
+    <result column="create_person" property="createPerson" jdbcType="VARCHAR" />
+    <result column="update_person" property="updatePerson" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="last_update_time" property="lastUpdateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    message_id, period_id, exception_desc, exception_reason, resolve_way, relate_pic, 
+    usable_flag, create_person, update_person, create_time, last_update_time
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.itheima.domain.TbExceptionMsgExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from tb_exception_msg
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from tb_exception_msg
+    where message_id = #{messageId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from tb_exception_msg
+    where message_id = #{messageId,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.itheima.domain.TbExceptionMsgExample" >
+    delete from tb_exception_msg
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.itheima.domain.TbExceptionMsg" >
+    insert into tb_exception_msg (message_id, period_id, exception_desc, 
+      exception_reason, resolve_way, relate_pic, 
+      usable_flag, create_person, update_person, 
+      create_time, last_update_time)
+    values (#{messageId,jdbcType=INTEGER}, #{periodId,jdbcType=INTEGER}, #{exceptionDesc,jdbcType=VARCHAR}, 
+      #{exceptionReason,jdbcType=VARCHAR}, #{resolveWay,jdbcType=VARCHAR}, #{relatePic,jdbcType=VARCHAR}, 
+      #{usableFlag,jdbcType=INTEGER}, #{createPerson,jdbcType=VARCHAR}, #{updatePerson,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{lastUpdateTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.itheima.domain.TbExceptionMsg" >
+    insert into tb_exception_msg
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="messageId != null" >
+        message_id,
+      </if>
+      <if test="periodId != null" >
+        period_id,
+      </if>
+      <if test="exceptionDesc != null" >
+        exception_desc,
+      </if>
+      <if test="exceptionReason != null" >
+        exception_reason,
+      </if>
+      <if test="resolveWay != null" >
+        resolve_way,
+      </if>
+      <if test="relatePic != null" >
+        relate_pic,
+      </if>
+      <if test="usableFlag != null" >
+        usable_flag,
+      </if>
+      <if test="createPerson != null" >
+        create_person,
+      </if>
+      <if test="updatePerson != null" >
+        update_person,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="lastUpdateTime != null" >
+        last_update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="messageId != null" >
+        #{messageId,jdbcType=INTEGER},
+      </if>
+      <if test="periodId != null" >
+        #{periodId,jdbcType=INTEGER},
+      </if>
+      <if test="exceptionDesc != null" >
+        #{exceptionDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="exceptionReason != null" >
+        #{exceptionReason,jdbcType=VARCHAR},
+      </if>
+      <if test="resolveWay != null" >
+        #{resolveWay,jdbcType=VARCHAR},
+      </if>
+      <if test="relatePic != null" >
+        #{relatePic,jdbcType=VARCHAR},
+      </if>
+      <if test="usableFlag != null" >
+        #{usableFlag,jdbcType=INTEGER},
+      </if>
+      <if test="createPerson != null" >
+        #{createPerson,jdbcType=VARCHAR},
+      </if>
+      <if test="updatePerson != null" >
+        #{updatePerson,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastUpdateTime != null" >
+        #{lastUpdateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.itheima.domain.TbExceptionMsgExample" resultType="java.lang.Integer" >
+    select count(*) from tb_exception_msg
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update tb_exception_msg
+    <set >
+      <if test="record.messageId != null" >
+        message_id = #{record.messageId,jdbcType=INTEGER},
+      </if>
+      <if test="record.periodId != null" >
+        period_id = #{record.periodId,jdbcType=INTEGER},
+      </if>
+      <if test="record.exceptionDesc != null" >
+        exception_desc = #{record.exceptionDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="record.exceptionReason != null" >
+        exception_reason = #{record.exceptionReason,jdbcType=VARCHAR},
+      </if>
+      <if test="record.resolveWay != null" >
+        resolve_way = #{record.resolveWay,jdbcType=VARCHAR},
+      </if>
+      <if test="record.relatePic != null" >
+        relate_pic = #{record.relatePic,jdbcType=VARCHAR},
+      </if>
+      <if test="record.usableFlag != null" >
+        usable_flag = #{record.usableFlag,jdbcType=INTEGER},
+      </if>
+      <if test="record.createPerson != null" >
+        create_person = #{record.createPerson,jdbcType=VARCHAR},
+      </if>
+      <if test="record.updatePerson != null" >
+        update_person = #{record.updatePerson,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTime != null" >
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.lastUpdateTime != null" >
+        last_update_time = #{record.lastUpdateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update tb_exception_msg
+    set message_id = #{record.messageId,jdbcType=INTEGER},
+      period_id = #{record.periodId,jdbcType=INTEGER},
+      exception_desc = #{record.exceptionDesc,jdbcType=VARCHAR},
+      exception_reason = #{record.exceptionReason,jdbcType=VARCHAR},
+      resolve_way = #{record.resolveWay,jdbcType=VARCHAR},
+      relate_pic = #{record.relatePic,jdbcType=VARCHAR},
+      usable_flag = #{record.usableFlag,jdbcType=INTEGER},
+      create_person = #{record.createPerson,jdbcType=VARCHAR},
+      update_person = #{record.updatePerson,jdbcType=VARCHAR},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      last_update_time = #{record.lastUpdateTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.itheima.domain.TbExceptionMsg" >
+    update tb_exception_msg
+    <set >
+      <if test="periodId != null" >
+        period_id = #{periodId,jdbcType=INTEGER},
+      </if>
+      <if test="exceptionDesc != null" >
+        exception_desc = #{exceptionDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="exceptionReason != null" >
+        exception_reason = #{exceptionReason,jdbcType=VARCHAR},
+      </if>
+      <if test="resolveWay != null" >
+        resolve_way = #{resolveWay,jdbcType=VARCHAR},
+      </if>
+      <if test="relatePic != null" >
+        relate_pic = #{relatePic,jdbcType=VARCHAR},
+      </if>
+      <if test="usableFlag != null" >
+        usable_flag = #{usableFlag,jdbcType=INTEGER},
+      </if>
+      <if test="createPerson != null" >
+        create_person = #{createPerson,jdbcType=VARCHAR},
+      </if>
+      <if test="updatePerson != null" >
+        update_person = #{updatePerson,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastUpdateTime != null" >
+        last_update_time = #{lastUpdateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where message_id = #{messageId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.itheima.domain.TbExceptionMsg" >
+    update tb_exception_msg
+    set period_id = #{periodId,jdbcType=INTEGER},
+      exception_desc = #{exceptionDesc,jdbcType=VARCHAR},
+      exception_reason = #{exceptionReason,jdbcType=VARCHAR},
+      resolve_way = #{resolveWay,jdbcType=VARCHAR},
+      relate_pic = #{relatePic,jdbcType=VARCHAR},
+      usable_flag = #{usableFlag,jdbcType=INTEGER},
+      create_person = #{createPerson,jdbcType=VARCHAR},
+      update_person = #{updatePerson,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      last_update_time = #{lastUpdateTime,jdbcType=TIMESTAMP}
+    where message_id = #{messageId,jdbcType=INTEGER}
+  </update>
+</mapper>

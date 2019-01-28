@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="XiaMenOA:war">
+    <output-path>$PROJECT_DIR$/target</output-path>
+    <root id="archive" name="xmqa.war">
+      <element id="artifact" artifact-name="XiaMenOA:war exploded" />
+    </root>
+  </artifact>
+</component>

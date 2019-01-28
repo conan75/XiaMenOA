@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.itheima.mapper.TbHolidayMapper" >
+  <resultMap id="BaseResultMap" type="com.itheima.domain.TbHoliday" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="holiday_name" property="holidayName" jdbcType="VARCHAR" />
+    <result column="vacation_days" property="vacationDays" jdbcType="VARCHAR" />
+    <result column="vacation_date" property="vacationDate" jdbcType="VARCHAR" />
+    <result column="remarks" property="remarks" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, holiday_name, vacation_days, vacation_date, remarks
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.itheima.domain.TbHolidayExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from tb_holiday
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from tb_holiday
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from tb_holiday
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.itheima.domain.TbHolidayExample" >
+    delete from tb_holiday
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.itheima.domain.TbHoliday" >
+    insert into tb_holiday (id, holiday_name, vacation_days, 
+      vacation_date, remarks)
+    values (#{id,jdbcType=INTEGER}, #{holidayName,jdbcType=VARCHAR}, #{vacationDays,jdbcType=VARCHAR}, 
+      #{vacationDate,jdbcType=VARCHAR}, #{remarks,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.itheima.domain.TbHoliday" >
+    insert into tb_holiday
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="holidayName != null" >
+        holiday_name,
+      </if>
+      <if test="vacationDays != null" >
+        vacation_days,
+      </if>
+      <if test="vacationDate != null" >
+        vacation_date,
+      </if>
+      <if test="remarks != null" >
+        remarks,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="holidayName != null" >
+        #{holidayName,jdbcType=VARCHAR},
+      </if>
+      <if test="vacationDays != null" >
+        #{vacationDays,jdbcType=VARCHAR},
+      </if>
+      <if test="vacationDate != null" >
+        #{vacationDate,jdbcType=VARCHAR},
+      </if>
+      <if test="remarks != null" >
+        #{remarks,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.itheima.domain.TbHolidayExample" resultType="java.lang.Integer" >
+    select count(*) from tb_holiday
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update tb_holiday
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.holidayName != null" >
+        holiday_name = #{record.holidayName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.vacationDays != null" >
+        vacation_days = #{record.vacationDays,jdbcType=VARCHAR},
+      </if>
+      <if test="record.vacationDate != null" >
+        vacation_date = #{record.vacationDate,jdbcType=VARCHAR},
+      </if>
+      <if test="record.remarks != null" >
+        remarks = #{record.remarks,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update tb_holiday
+    set id = #{record.id,jdbcType=INTEGER},
+      holiday_name = #{record.holidayName,jdbcType=VARCHAR},
+      vacation_days = #{record.vacationDays,jdbcType=VARCHAR},
+      vacation_date = #{record.vacationDate,jdbcType=VARCHAR},
+      remarks = #{record.remarks,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.itheima.domain.TbHoliday" >
+    update tb_holiday
+    <set >
+      <if test="holidayName != null" >
+        holiday_name = #{holidayName,jdbcType=VARCHAR},
+      </if>
+      <if test="vacationDays != null" >
+        vacation_days = #{vacationDays,jdbcType=VARCHAR},
+      </if>
+      <if test="vacationDate != null" >
+        vacation_date = #{vacationDate,jdbcType=VARCHAR},
+      </if>
+      <if test="remarks != null" >
+        remarks = #{remarks,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.itheima.domain.TbHoliday" >
+    update tb_holiday
+    set holiday_name = #{holidayName,jdbcType=VARCHAR},
+      vacation_days = #{vacationDays,jdbcType=VARCHAR},
+      vacation_date = #{vacationDate,jdbcType=VARCHAR},
+      remarks = #{remarks,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

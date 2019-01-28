@@ -1,0 +1,9 @@
+127.0.0.1 - - [28/Jan/2019:11:03:14 +0800] "GET / HTTP/1.1" 200 3077 http-bio-8081-exec-1 1685
+127.0.0.1 - - [28/Jan/2019:11:03:15 +0800] "GET /favicon.ico HTTP/1.1" 404 973 http-bio-8081-exec-3 12
+127.0.0.1 - - [28/Jan/2019:11:03:16 +0800] "POST /login HTTP/1.1" 302 - http-bio-8081-exec-4 830
+127.0.0.1 - - [28/Jan/2019:11:03:17 +0800] "GET /jsp/main.jsp HTTP/1.1" 200 9484 http-bio-8081-exec-5 599
+127.0.0.1 - - [28/Jan/2019:11:03:17 +0800] "GET /img/company1.jpg HTTP/1.1" 200 26486 http-bio-8081-exec-6 91
+127.0.0.1 - - [28/Jan/2019:11:03:17 +0800] "GET /img/company3.jpg HTTP/1.1" 200 140599 http-bio-8081-exec-7 108
+127.0.0.1 - - [28/Jan/2019:11:03:18 +0800] "GET /img/company2.jpg HTTP/1.1" 200 2312403 http-bio-8081-exec-2 403
+127.0.0.1 - - [28/Jan/2019:11:03:28 +0800] "GET /course/findByPage.do HTTP/1.1" 200 14494 http-bio-8081-exec-10 1623
+127.0.0.1 - - [28/Jan/2019:11:03:29 +0800] "GET /period/findByPage.do HTTP/1.1" 200 20682 http-bio-8081-exec-1 380
