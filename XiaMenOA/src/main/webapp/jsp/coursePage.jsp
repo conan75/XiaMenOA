@@ -26,7 +26,8 @@
     <!-- 中间部分（包括左边栏和员工/部门表单显示部分） -->
     <div class="hrms_body" style="position:relative; top:-15px;">
 
-        <!-- 左侧栏 -->
+        <!-- 左 侧 栏 -->
+
         <%@ include file="./commom/leftsidebar.jsp"%>
 
         <!-- 中间员工表格信息展示内容 -->
