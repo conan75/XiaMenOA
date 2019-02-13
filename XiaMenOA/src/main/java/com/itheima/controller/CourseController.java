@@ -1,6 +1,7 @@
 package com.itheima.controller;
 
 import com.itheima.service.CourseService;
+import com.itheima.utils.CourseImport;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -40,6 +41,22 @@ public class CourseController {
     public String modelImport(MultipartFile excelFile){
         try {
             courseService.addPeriod(excelFile);
+            return "success";
+        }catch (Exception e){
+            e.printStackTrace();
+            return "";
+        }
+    }
+
+    /**
+     * 新增课程表模板信息
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping("/courseAdd.do")
+    public String courseAdd(CourseImport courseImport){
+        try {
+            System.out.println(courseImport);
             return "success";
         }catch (Exception e){
             e.printStackTrace();

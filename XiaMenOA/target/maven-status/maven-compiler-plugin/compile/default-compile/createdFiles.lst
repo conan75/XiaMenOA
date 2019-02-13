@@ -3,6 +3,7 @@ com\itheima\domain\TbCourseExample$Criterion.class
 com\itheima\service\PeriodService.class
 com\itheima\domain\TbCourseExample$GeneratedCriteria.class
 com\itheima\domain\TbTeacherExample.class
+com\itheima\utils\CourseImport.class
 com\itheima\service\PeriodServiceImpl.class
 com\itheima\controller\PeriodController.class
 com\itheima\mapper\TbTeacherMapper.class
@@ -25,6 +26,7 @@ com\itheima\domain\TbCourseTempExample$Criterion.class
 com\itheima\utils\FastDFSClient.class
 com\itheima\mapper\TbUserMapper.class
 com\itheima\domain\Result.class
+com\itheima\utils\MyDateConverter.class
 com\itheima\controller\UploadController.class
 com\itheima\domain\TbPeriodExample$Criterion.class
 com\itheima\domain\TbPeriodExample.class
