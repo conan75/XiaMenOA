@@ -17,6 +17,7 @@
         <!--<intercept-url pattern="/**" access="ROLE_ADMIN"/>-->
         <intercept-url pattern="/bug/*.do" access="hasAnyRole('ROLE_ASSISTANT,ROLE_ADMIN')"/>
         <intercept-url pattern="/period/*.do" access="hasAnyRole('ROLE_ADMIN')"/>
+        <intercept-url pattern="/asset/*.do" access="hasAnyRole('ROLE_ADMIN')"/>
         <intercept-url pattern="/course/*.do" access="hasAnyRole('ROLE_ADMIN')"/>
         <intercept-url pattern="/jsp/**" access="hasAnyRole('ROLE_ASSISTANT,ROLE_ADMIN')"/>
         <!-- 开启表单登陆功能 -->

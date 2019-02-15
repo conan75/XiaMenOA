@@ -20,8 +20,19 @@
             </a>
             <ul class="nav nav-pills nav-stacked" id="collapse_dept">
                 <li role="presentation"><a href="#" class="bugMsg_info">异常信息管理</a></li>
-                <%--<li role="presentation"><a href="#" class="bugMsg_add_btn" data-toggle="modal" data-target=".bugMsg-add-modal">添加异常</a></li>--%>
-                <%--<li role="presentation"><a href="#" class="bugMsg_clearall_btn">待开发</a></li>--%>
+            </ul>
+        </li>
+    </ul>
+    <ul class="nav nav-pills nav-stacked dept_sidebar">
+        <li role="presentation" class="active">
+            <a href="#"  data-toggle="collapse" data-target="#administration">
+                <span class="glyphicon glyphicon-cloud" aria-hidden="true">行政管理</span>
+            </a>
+            <ul class="nav nav-pills nav-stacked" id="administration">
+                <li role="presentation"><a href="#" class="asset_info">校区资产管理</a></li>
+                <li role="presentation"><a href="#" class="material_info">耗材管理</a></li>
+                <li role="presentation"><a href="#" class="purchase_info">采购管理</a></li>
+                <li role="presentation"><a href="#" class="storage_info">库房管理</a></li>
             </ul>
         </li>
     </ul>
@@ -46,14 +57,50 @@
     $(".bugMsg_info").click(function () {
         $(this).attr("href", "/bug/findByPage.do");
     });
-    //员工清零这个功能暂未实现
-    $(".emp_clearall_btn").click(function () {
-        alert("对不起，您暂无权限进行操作！请先获取权限");
+
+    //跳转到校区资产管理页面
+    $(".asset_info").click(function () {
+
+        if($("#loginUser").val()!="zhangsan"){
+            alert("权限不足")
+        }else{
+            $(this).attr("href", "/asset/findByPage.do");
+        }
     });
-    //部门清零这个功能暂未实现
-    $(".bugMsg_clearall_btn").click(function () {
-        alert("对不起，您暂无权限进行操作！请先获取权限");
+
+    //跳转到校区耗材管理页面
+    $(".material_info").click(function () {
+
+        if($("#loginUser").val()!="zhangsan"){
+            alert("权限不足")
+        }else{
+            alert("努力开发中...")
+            // $(this).attr("href", "/period/findByPage.do");
+        }
     });
+
+    //跳转到校区采购管理页面
+    $(".purchase_info").click(function () {
+
+        if($("#loginUser").val()!="zhangsan"){
+            alert("权限不足")
+        }else{
+            alert("努力开发中...")
+            // $(this).attr("href", "/period/findByPage.do");
+        }
+    });
+
+    //跳转到校区库房管理页面
+    $(".storage_info").click(function () {
+
+        if($("#loginUser").val()!="zhangsan"){
+            alert("权限不足")
+        }else{
+            alert("努力开发中...")
+            // $(this).attr("href", "/period/findByPage.do");
+        }
+    });
+
 </script>
 </body>
 </html>

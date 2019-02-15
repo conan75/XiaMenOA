@@ -1,0 +1,433 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.itheima.mapper.TbAssetMapper" >
+  <resultMap id="BaseResultMap" type="com.itheima.domain.TbAsset" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="asset_code" property="assetCode" jdbcType="VARCHAR" />
+    <result column="serial_num" property="serialNum" jdbcType="VARCHAR" />
+    <result column="type_id" property="typeId" jdbcType="INTEGER" />
+    <result column="type_name" property="typeName" jdbcType="VARCHAR" />
+    <result column="asset_name" property="assetName" jdbcType="VARCHAR" />
+    <result column="purchase_date" property="purchaseDate" jdbcType="DATE" />
+    <result column="model_num" property="modelNum" jdbcType="VARCHAR" />
+    <result column="purchase_number" property="purchaseNumber" jdbcType="INTEGER" />
+    <result column="unit" property="unit" jdbcType="VARCHAR" />
+    <result column="price" property="price" jdbcType="DECIMAL" />
+    <result column="total_money" property="totalMoney" jdbcType="DECIMAL" />
+    <result column="use_department" property="useDepartment" jdbcType="VARCHAR" />
+    <result column="use_person" property="usePerson" jdbcType="VARCHAR" />
+    <result column="use_status" property="useStatus" jdbcType="INTEGER" />
+    <result column="deposit_place" property="depositPlace" jdbcType="VARCHAR" />
+    <result column="remarks" property="remarks" jdbcType="VARCHAR" />
+    <result column="usable_flag" property="usableFlag" jdbcType="INTEGER" />
+    <result column="last_update_time" property="lastUpdateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, asset_code, serial_num, type_id, type_name, asset_name, purchase_date, model_num, 
+    purchase_number, unit, price, total_money, use_department, use_person, use_status, 
+    deposit_place, remarks, usable_flag, last_update_time
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.itheima.domain.TbAssetExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from tb_asset
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from tb_asset
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from tb_asset
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.itheima.domain.TbAssetExample" >
+    delete from tb_asset
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.itheima.domain.TbAsset" >
+    insert into tb_asset (id, asset_code, serial_num, 
+      type_id, type_name, asset_name, 
+      purchase_date, model_num, purchase_number, 
+      unit, price, total_money, 
+      use_department, use_person, use_status, 
+      deposit_place, remarks, usable_flag, 
+      last_update_time)
+    values (#{id,jdbcType=INTEGER}, #{assetCode,jdbcType=VARCHAR}, #{serialNum,jdbcType=VARCHAR}, 
+      #{typeId,jdbcType=INTEGER}, #{typeName,jdbcType=VARCHAR}, #{assetName,jdbcType=VARCHAR}, 
+      #{purchaseDate,jdbcType=DATE}, #{modelNum,jdbcType=VARCHAR}, #{purchaseNumber,jdbcType=INTEGER}, 
+      #{unit,jdbcType=VARCHAR}, #{price,jdbcType=DECIMAL}, #{totalMoney,jdbcType=DECIMAL}, 
+      #{useDepartment,jdbcType=VARCHAR}, #{usePerson,jdbcType=VARCHAR}, #{useStatus,jdbcType=INTEGER}, 
+      #{depositPlace,jdbcType=VARCHAR}, #{remarks,jdbcType=VARCHAR}, #{usableFlag,jdbcType=INTEGER}, 
+      #{lastUpdateTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.itheima.domain.TbAsset" >
+    insert into tb_asset
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="assetCode != null" >
+        asset_code,
+      </if>
+      <if test="serialNum != null" >
+        serial_num,
+      </if>
+      <if test="typeId != null" >
+        type_id,
+      </if>
+      <if test="typeName != null" >
+        type_name,
+      </if>
+      <if test="assetName != null" >
+        asset_name,
+      </if>
+      <if test="purchaseDate != null" >
+        purchase_date,
+      </if>
+      <if test="modelNum != null" >
+        model_num,
+      </if>
+      <if test="purchaseNumber != null" >
+        purchase_number,
+      </if>
+      <if test="unit != null" >
+        unit,
+      </if>
+      <if test="price != null" >
+        price,
+      </if>
+      <if test="totalMoney != null" >
+        total_money,
+      </if>
+      <if test="useDepartment != null" >
+        use_department,
+      </if>
+      <if test="usePerson != null" >
+        use_person,
+      </if>
+      <if test="useStatus != null" >
+        use_status,
+      </if>
+      <if test="depositPlace != null" >
+        deposit_place,
+      </if>
+      <if test="remarks != null" >
+        remarks,
+      </if>
+      <if test="usableFlag != null" >
+        usable_flag,
+      </if>
+      <if test="lastUpdateTime != null" >
+        last_update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="assetCode != null" >
+        #{assetCode,jdbcType=VARCHAR},
+      </if>
+      <if test="serialNum != null" >
+        #{serialNum,jdbcType=VARCHAR},
+      </if>
+      <if test="typeId != null" >
+        #{typeId,jdbcType=INTEGER},
+      </if>
+      <if test="typeName != null" >
+        #{typeName,jdbcType=VARCHAR},
+      </if>
+      <if test="assetName != null" >
+        #{assetName,jdbcType=VARCHAR},
+      </if>
+      <if test="purchaseDate != null" >
+        #{purchaseDate,jdbcType=DATE},
+      </if>
+      <if test="modelNum != null" >
+        #{modelNum,jdbcType=VARCHAR},
+      </if>
+      <if test="purchaseNumber != null" >
+        #{purchaseNumber,jdbcType=INTEGER},
+      </if>
+      <if test="unit != null" >
+        #{unit,jdbcType=VARCHAR},
+      </if>
+      <if test="price != null" >
+        #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="totalMoney != null" >
+        #{totalMoney,jdbcType=DECIMAL},
+      </if>
+      <if test="useDepartment != null" >
+        #{useDepartment,jdbcType=VARCHAR},
+      </if>
+      <if test="usePerson != null" >
+        #{usePerson,jdbcType=VARCHAR},
+      </if>
+      <if test="useStatus != null" >
+        #{useStatus,jdbcType=INTEGER},
+      </if>
+      <if test="depositPlace != null" >
+        #{depositPlace,jdbcType=VARCHAR},
+      </if>
+      <if test="remarks != null" >
+        #{remarks,jdbcType=VARCHAR},
+      </if>
+      <if test="usableFlag != null" >
+        #{usableFlag,jdbcType=INTEGER},
+      </if>
+      <if test="lastUpdateTime != null" >
+        #{lastUpdateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.itheima.domain.TbAssetExample" resultType="java.lang.Integer" >
+    select count(*) from tb_asset
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update tb_asset
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.assetCode != null" >
+        asset_code = #{record.assetCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.serialNum != null" >
+        serial_num = #{record.serialNum,jdbcType=VARCHAR},
+      </if>
+      <if test="record.typeId != null" >
+        type_id = #{record.typeId,jdbcType=INTEGER},
+      </if>
+      <if test="record.typeName != null" >
+        type_name = #{record.typeName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.assetName != null" >
+        asset_name = #{record.assetName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.purchaseDate != null" >
+        purchase_date = #{record.purchaseDate,jdbcType=DATE},
+      </if>
+      <if test="record.modelNum != null" >
+        model_num = #{record.modelNum,jdbcType=VARCHAR},
+      </if>
+      <if test="record.purchaseNumber != null" >
+        purchase_number = #{record.purchaseNumber,jdbcType=INTEGER},
+      </if>
+      <if test="record.unit != null" >
+        unit = #{record.unit,jdbcType=VARCHAR},
+      </if>
+      <if test="record.price != null" >
+        price = #{record.price,jdbcType=DECIMAL},
+      </if>
+      <if test="record.totalMoney != null" >
+        total_money = #{record.totalMoney,jdbcType=DECIMAL},
+      </if>
+      <if test="record.useDepartment != null" >
+        use_department = #{record.useDepartment,jdbcType=VARCHAR},
+      </if>
+      <if test="record.usePerson != null" >
+        use_person = #{record.usePerson,jdbcType=VARCHAR},
+      </if>
+      <if test="record.useStatus != null" >
+        use_status = #{record.useStatus,jdbcType=INTEGER},
+      </if>
+      <if test="record.depositPlace != null" >
+        deposit_place = #{record.depositPlace,jdbcType=VARCHAR},
+      </if>
+      <if test="record.remarks != null" >
+        remarks = #{record.remarks,jdbcType=VARCHAR},
+      </if>
+      <if test="record.usableFlag != null" >
+        usable_flag = #{record.usableFlag,jdbcType=INTEGER},
+      </if>
+      <if test="record.lastUpdateTime != null" >
+        last_update_time = #{record.lastUpdateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update tb_asset
+    set id = #{record.id,jdbcType=INTEGER},
+      asset_code = #{record.assetCode,jdbcType=VARCHAR},
+      serial_num = #{record.serialNum,jdbcType=VARCHAR},
+      type_id = #{record.typeId,jdbcType=INTEGER},
+      type_name = #{record.typeName,jdbcType=VARCHAR},
+      asset_name = #{record.assetName,jdbcType=VARCHAR},
+      purchase_date = #{record.purchaseDate,jdbcType=DATE},
+      model_num = #{record.modelNum,jdbcType=VARCHAR},
+      purchase_number = #{record.purchaseNumber,jdbcType=INTEGER},
+      unit = #{record.unit,jdbcType=VARCHAR},
+      price = #{record.price,jdbcType=DECIMAL},
+      total_money = #{record.totalMoney,jdbcType=DECIMAL},
+      use_department = #{record.useDepartment,jdbcType=VARCHAR},
+      use_person = #{record.usePerson,jdbcType=VARCHAR},
+      use_status = #{record.useStatus,jdbcType=INTEGER},
+      deposit_place = #{record.depositPlace,jdbcType=VARCHAR},
+      remarks = #{record.remarks,jdbcType=VARCHAR},
+      usable_flag = #{record.usableFlag,jdbcType=INTEGER},
+      last_update_time = #{record.lastUpdateTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.itheima.domain.TbAsset" >
+    update tb_asset
+    <set >
+      <if test="assetCode != null" >
+        asset_code = #{assetCode,jdbcType=VARCHAR},
+      </if>
+      <if test="serialNum != null" >
+        serial_num = #{serialNum,jdbcType=VARCHAR},
+      </if>
+      <if test="typeId != null" >
+        type_id = #{typeId,jdbcType=INTEGER},
+      </if>
+      <if test="typeName != null" >
+        type_name = #{typeName,jdbcType=VARCHAR},
+      </if>
+      <if test="assetName != null" >
+        asset_name = #{assetName,jdbcType=VARCHAR},
+      </if>
+      <if test="purchaseDate != null" >
+        purchase_date = #{purchaseDate,jdbcType=DATE},
+      </if>
+      <if test="modelNum != null" >
+        model_num = #{modelNum,jdbcType=VARCHAR},
+      </if>
+      <if test="purchaseNumber != null" >
+        purchase_number = #{purchaseNumber,jdbcType=INTEGER},
+      </if>
+      <if test="unit != null" >
+        unit = #{unit,jdbcType=VARCHAR},
+      </if>
+      <if test="price != null" >
+        price = #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="totalMoney != null" >
+        total_money = #{totalMoney,jdbcType=DECIMAL},
+      </if>
+      <if test="useDepartment != null" >
+        use_department = #{useDepartment,jdbcType=VARCHAR},
+      </if>
+      <if test="usePerson != null" >
+        use_person = #{usePerson,jdbcType=VARCHAR},
+      </if>
+      <if test="useStatus != null" >
+        use_status = #{useStatus,jdbcType=INTEGER},
+      </if>
+      <if test="depositPlace != null" >
+        deposit_place = #{depositPlace,jdbcType=VARCHAR},
+      </if>
+      <if test="remarks != null" >
+        remarks = #{remarks,jdbcType=VARCHAR},
+      </if>
+      <if test="usableFlag != null" >
+        usable_flag = #{usableFlag,jdbcType=INTEGER},
+      </if>
+      <if test="lastUpdateTime != null" >
+        last_update_time = #{lastUpdateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.itheima.domain.TbAsset" >
+    update tb_asset
+    set asset_code = #{assetCode,jdbcType=VARCHAR},
+      serial_num = #{serialNum,jdbcType=VARCHAR},
+      type_id = #{typeId,jdbcType=INTEGER},
+      type_name = #{typeName,jdbcType=VARCHAR},
+      asset_name = #{assetName,jdbcType=VARCHAR},
+      purchase_date = #{purchaseDate,jdbcType=DATE},
+      model_num = #{modelNum,jdbcType=VARCHAR},
+      purchase_number = #{purchaseNumber,jdbcType=INTEGER},
+      unit = #{unit,jdbcType=VARCHAR},
+      price = #{price,jdbcType=DECIMAL},
+      total_money = #{totalMoney,jdbcType=DECIMAL},
+      use_department = #{useDepartment,jdbcType=VARCHAR},
+      use_person = #{usePerson,jdbcType=VARCHAR},
+      use_status = #{useStatus,jdbcType=INTEGER},
+      deposit_place = #{depositPlace,jdbcType=VARCHAR},
+      remarks = #{remarks,jdbcType=VARCHAR},
+      usable_flag = #{usableFlag,jdbcType=INTEGER},
+      last_update_time = #{lastUpdateTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

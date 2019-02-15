@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.util.Date;
 
 @Service
+//这个类里面的方法抛出异常，就会回滚，数据库里面的数据也会回滚
 @Transactional(rollbackFor=Exception.class)
 public class CourseServiceImpl implements CourseService {
 
