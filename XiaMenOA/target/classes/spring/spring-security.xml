@@ -9,6 +9,7 @@
     <http pattern="/jsp/login.jsp" security="none"></http>
     <http pattern="/img/**" security="none"></http>
     <http pattern="/js/**" security="none"></http>
+    <http pattern="/css/**" security="none"></http>
     <http pattern="/plugins/**" security="none"></http>
 
     <!-- 页面的拦截规则    use-expressions:是否启动SPEL表达式 默认是true -->
@@ -17,6 +18,7 @@
         <!--<intercept-url pattern="/**" access="ROLE_ADMIN"/>-->
         <intercept-url pattern="/bug/*.do" access="hasAnyRole('ROLE_ASSISTANT,ROLE_ADMIN')"/>
         <intercept-url pattern="/period/*.do" access="hasAnyRole('ROLE_ADMIN')"/>
+        <intercept-url pattern="/asset/*.do" access="hasAnyRole('ROLE_ADMIN')"/>
         <intercept-url pattern="/course/*.do" access="hasAnyRole('ROLE_ADMIN')"/>
         <intercept-url pattern="/jsp/**" access="hasAnyRole('ROLE_ASSISTANT,ROLE_ADMIN')"/>
         <!-- 开启表单登陆功能 -->
