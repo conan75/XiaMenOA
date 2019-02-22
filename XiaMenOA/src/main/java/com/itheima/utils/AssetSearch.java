@@ -10,8 +10,6 @@ public class AssetSearch {
     private String typeName;
     private Date startDate;
     private Date endDate;
-    private String modelNum;
-    private Integer useStatus;
 
     @Override
     public String toString() {
@@ -25,7 +23,21 @@ public class AssetSearch {
                 ", endDate=" + endDate +
                 ", modelNum='" + modelNum + '\'' +
                 ", useStatus=" + useStatus +
+                ", searchFlag=" + searchFlag +
                 '}';
+    }
+
+    private String modelNum;
+    private Integer useStatus;
+    //搜索标记,页面搜索分页展示时区分的标志,等于1的时候表示具有搜索条件
+    private Integer searchFlag=-1;
+
+    public Integer getSearchFlag() {
+        return searchFlag;
+    }
+
+    public void setSearchFlag(Integer searchFlag) {
+        this.searchFlag = searchFlag;
     }
 
     public String getAssetCode() {

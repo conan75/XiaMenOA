@@ -9,6 +9,7 @@
     <http pattern="/jsp/login.jsp" security="none"></http>
     <http pattern="/img/**" security="none"></http>
     <http pattern="/js/**" security="none"></http>
+    <http pattern="/css/**" security="none"></http>
     <http pattern="/plugins/**" security="none"></http>
 
     <!-- 页面的拦截规则    use-expressions:是否启动SPEL表达式 默认是true -->

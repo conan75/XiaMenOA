@@ -14,6 +14,31 @@ public class TbAsset {
 
     private String typeName;
 
+    @Override
+    public String toString() {
+        return "TbAsset{" +
+                "id=" + id +
+                ", assetCode='" + assetCode + '\'' +
+                ", serialNum='" + serialNum + '\'' +
+                ", typeId=" + typeId +
+                ", typeName='" + typeName + '\'' +
+                ", assetName='" + assetName + '\'' +
+                ", purchaseDate=" + purchaseDate +
+                ", modelNum='" + modelNum + '\'' +
+                ", purchaseNumber=" + purchaseNumber +
+                ", unit='" + unit + '\'' +
+                ", price=" + price +
+                ", totalMoney=" + totalMoney +
+                ", useDepartment='" + useDepartment + '\'' +
+                ", usePerson='" + usePerson + '\'' +
+                ", useStatus=" + useStatus +
+                ", depositPlace='" + depositPlace + '\'' +
+                ", remarks='" + remarks + '\'' +
+                ", usableFlag=" + usableFlag +
+                ", lastUpdateTime=" + lastUpdateTime +
+                '}';
+    }
+
     private String assetName;
 
     private Date purchaseDate;

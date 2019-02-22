@@ -1,14 +1,16 @@
 package com.itheima.controller;
 
 import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
-import com.github.pagehelper.util.StringUtil;
 import com.itheima.domain.TbAsset;
+import com.itheima.domain.TbAssetType;
 import com.itheima.service.AssetService;
+import com.itheima.utils.AssetMsgs;
 import com.itheima.utils.AssetSearch;
+import com.itheima.utils.AssetTypeVo;
+import com.itheima.utils.PageResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -28,15 +30,13 @@ public class AssetController {
      *
      * @return
      */
+    @ResponseBody
     @RequestMapping("/findByPage.do")
-    public String findByPage(Model model, @RequestParam(required = false, defaultValue = "1", value = "pn") Integer pn) {
-        PageHelper.startPage(pn, 10);
+    public PageResult findByPage(@RequestParam(required = false, defaultValue = "1", value = "page") Integer page,Integer rows) {
+        PageHelper.startPage(page, rows);
         //pageHelper默认只对上述语句进行分页,需要设置完pageInfo后再修改里面存放的list,否则pageInfo中的total属性会存在问题(也就是说pagehelper只会对上述语句后的第一条查询进行分页)
-        List<TbAsset> list = assetService.findByPage();
-        PageInfo pageInfo = new PageInfo<>(list, 10);
-        pageInfo.setList(assetService.findAssetMsgs(list));
-        model.addAttribute("assets", pageInfo);
-        return "assetPage";
+        PageResult pageResult = assetService.findByPage();
+        return pageResult;
     }
 
     /**
@@ -91,38 +91,99 @@ public class AssetController {
     }
 
     /**
+     * 查找二级分类
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping("/findSecondType.do")
+    public List<TbAssetType> findSecondType(String typeName){
+        try {
+            List<Integer> idList=assetService.selectAllByParentId(typeName);
+            List<TbAssetType> list=assetService.selectAllByIdList(idList);
+            return list;
+        }catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    /**
+     * 查找三级分类
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping("/findThirdType.do")
+    public List<TbAssetType> findThirdType(AssetTypeVo assetTypeVo, Integer secondTypeName){
+        try {
+            List<TbAssetType> list=assetService.selectAllByIdList(assetTypeVo.getSecondList(),secondTypeName);
+            return list;
+        }catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    /**
+     * 新增资产
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping("/assetAdd.do")
+    public String assetAdd(TbAsset asset){
+        try {
+            assetService.assetAdd(asset);
+            return "success";
+        }catch (Exception e){
+            e.printStackTrace();
+            return "";
+        }
+    }
+
+    /**
+     * 更改资产状态
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping("/del.do")
+    public String assetAdd(Integer id,Integer useableFlag){
+        try {
+            assetService.del(id,useableFlag);
+            return "success";
+        }catch (Exception e){
+            e.printStackTrace();
+            return "";
+        }
+    }
+
+    /**
+     * 查找单个资产信息
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping("/findOne.do")
+    public AssetMsgs findOne(Integer id){
+        try {
+            TbAsset asset=assetService.findOne(id);
+            AssetMsgs assetMsgs = assetService.findAssetMsgs(asset);
+            return assetMsgs;
+        }catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    /**
      * 根据条件进行搜索
      * @return
      */
     @ResponseBody
     @RequestMapping("/search.do")
-    public String search(AssetSearch assetSearch){
-        assetSearch.setAssetCode(assetSearch.getAssetCode().trim());
-        assetSearch.setAssetName(assetSearch.getAssetName().trim());
-        assetSearch.setUsePerson(assetSearch.getUsePerson().trim());
-        assetSearch.setModelNum(assetSearch.getModelNum().trim());
-        if ("-1".equals(assetSearch.getUseDepartment())
-                &&"-1".equals(assetSearch.getTypeName())
-                &&assetSearch.getUseStatus()==-1
-                &&StringUtil.isEmpty(assetSearch.getAssetCode())
-                &&StringUtil.isEmpty(assetSearch.getAssetName())
-                &&StringUtil.isEmpty(assetSearch.getUsePerson())
-                &&assetSearch.getStartDate()==null
-                &&assetSearch.getEndDate()==null
-                &&StringUtil.isEmpty(assetSearch.getModelNum())
-                ){
-            //当查询条件为空时,重定向去查询全部
-            return "redirect:/asset/findByPage.do";
-        }
-//        PageHelper.startPage(pn, 10);
-//        //pageHelper默认只对上述语句进行分页,需要设置完pageInfo后再修改里面存放的list,否则pageInfo中的total属性会存在问题
-//        List<TbExceptionMsg> list = bugMsgService.search(bugSearch);
-//        PageInfo pageInfo = new PageInfo<>(list, 10);
-//        pageInfo.setList(bugMsgService.findBugMsgs(list));
-//        model.addAttribute("bugMsgs", pageInfo);
-//        model.addAttribute("bugSearch",bugSearch);
-//        return "bugMsgPage";
-        return null;
+    public PageResult search(@RequestBody AssetSearch assetSearch, @RequestParam(required = false, defaultValue = "1", value = "page") Integer page, Integer rows){
+        List<Integer> idList=assetService.selectAllByParentId(assetSearch.getTypeName());
+        PageHelper.startPage(page, rows);
+        //pageHelper默认只对上述语句后的第一条sql进行分页
+        PageResult pageResult = assetService.search(assetSearch ,idList);
+        return pageResult;
     }
 
 }

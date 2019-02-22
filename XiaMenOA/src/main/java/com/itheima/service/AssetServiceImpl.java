@@ -1,5 +1,7 @@
 package com.itheima.service;
 
+import com.github.pagehelper.Page;
+import com.github.pagehelper.util.StringUtil;
 import com.itheima.domain.TbAsset;
 import com.itheima.domain.TbAssetExample;
 import com.itheima.domain.TbAssetType;
@@ -7,6 +9,8 @@ import com.itheima.domain.TbAssetTypeExample;
 import com.itheima.mapper.TbAssetMapper;
 import com.itheima.mapper.TbAssetTypeMapper;
 import com.itheima.utils.AssetMsgs;
+import com.itheima.utils.AssetSearch;
+import com.itheima.utils.PageResult;
 import com.mchange.v2.lang.StringUtils;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -38,11 +42,13 @@ public class AssetServiceImpl implements AssetService {
     private TbAssetTypeMapper assetTypeMapper;
 
     @Override
-    public List<TbAsset> findByPage() {
+    public PageResult findByPage() {
         TbAssetExample example = new TbAssetExample();
-        example.createCriteria().andUsableFlagEqualTo(0);
+//        example.createCriteria().andUsableFlagEqualTo(0);
         example.setOrderByClause("purchase_date desc");
-        return tbAssetMapper.selectByExample(example);
+        Page page = (Page) tbAssetMapper.selectByExample(example);
+        List assetMsgs = findAssetMsgs(page.getResult());
+        return new PageResult(page.getTotal(),assetMsgs);
     }
 
     /**
@@ -525,5 +531,178 @@ public class AssetServiceImpl implements AssetService {
             list.add(assetMsgs);
         }
         return list;
+    }
+
+    @Override
+    public PageResult search(AssetSearch assetSearch, List<Integer> idList) {
+        TbAssetExample assetExample = new TbAssetExample();
+        TbAssetExample.Criteria criteria = assetExample.createCriteria();
+        assetExample.setOrderByClause("purchase_date desc");
+//        criteria.andUsableFlagEqualTo(0);
+        if (!StringUtil.isEmpty(assetSearch.getUseDepartment())&&!"-1".equals(assetSearch.getUseDepartment())){
+            //使用部门不为空
+            criteria.andUseDepartmentEqualTo(assetSearch.getUseDepartment());
+        }
+        if (!StringUtil.isEmpty(assetSearch.getTypeName())&&!"-1".equals(assetSearch.getTypeName())){
+            //类型名称不为空(固定资产,低值资产)
+            criteria.andTypeIdIn(idList);
+        }
+        if (assetSearch.getUseStatus()!=null&&assetSearch.getUseStatus()!=-1){
+            //使用状态不为空
+            criteria.andUseStatusEqualTo(assetSearch.getUseStatus());
+        }
+        if(!StringUtil.isEmpty(assetSearch.getAssetCode())){
+            //资产编码不为空
+            criteria.andAssetCodeEqualTo(assetSearch.getAssetCode().trim());
+        }
+        if (!StringUtil.isEmpty(assetSearch.getAssetName())){
+            //资产名称不为空
+            criteria.andAssetNameLike("%"+assetSearch.getAssetName().trim()+"%");
+        }
+        if (!StringUtil.isEmpty(assetSearch.getUsePerson())){
+            //使用人不为空
+            criteria.andUsePersonLike("%"+assetSearch.getUsePerson().trim()+"%");
+        }
+        if (assetSearch.getStartDate()!=null){
+            //开始日期不为空
+            criteria.andPurchaseDateGreaterThan(assetSearch.getStartDate());
+        }
+        if (assetSearch.getEndDate()!=null){
+            //结束日期不为空
+            criteria.andPurchaseDateLessThan(assetSearch.getEndDate());
+        }
+        if (!StringUtil.isEmpty(assetSearch.getModelNum())){
+            //型号不为空
+            criteria.andModelNumLike("%"+assetSearch.getModelNum().trim()+"%");
+        }
+        Page page = (Page) tbAssetMapper.selectByExample(assetExample);
+        List assetMsgs = findAssetMsgs(page.getResult());
+        return new PageResult(page.getTotal(),assetMsgs);
+    }
+
+    /**
+     * 该方法与search方法对应,是为了消除搜索无法分页的bug
+     * @param
+     * @return
+     */
+    @Override
+    public List<Integer> selectAllByParentId(String typeName) {
+        TbAssetTypeExample typeExample = new TbAssetTypeExample();
+        if("固定资产".equals(typeName)){
+            typeExample.createCriteria().andParentIdEqualTo(1);
+        }else if("低值资产".equals(typeName)){
+            typeExample.createCriteria().andParentIdEqualTo(2);
+        }
+        //先查出所有的二级类别,并存储id于新的集合中
+        List<TbAssetType> assetTypes = assetTypeMapper.selectByExample(typeExample);
+        ArrayList<Integer> list = new ArrayList<>();
+        for (TbAssetType assetType : assetTypes) {
+            list.add(assetType.getTypeId());
+        }
+        return list;
+    }
+
+    /**
+     * 根据类型Id获取类型列表
+     * @param idList
+     * @return
+     */
+    @Override
+    public List<TbAssetType> selectAllByIdList(List<Integer> idList) {
+        List<TbAssetType> list = new ArrayList<>();
+        for (Integer typeId : idList) {
+            TbAssetTypeExample typeExample = new TbAssetTypeExample();
+            typeExample.createCriteria().andTypeIdEqualTo(typeId);
+            TbAssetType assetType = assetTypeMapper.selectByExample(typeExample).get(0);
+            list.add(assetType);
+        }
+        return list;
+    }
+
+    /**
+     * 获取三级类别名称
+     * @param secondList
+     * @param secondTypeName
+     * @return
+     */
+    @Override
+    public List<TbAssetType> selectAllByIdList(List<TbAssetType> secondList, Integer secondTypeName) {
+        List<TbAssetType> list=new ArrayList<>();
+        for (TbAssetType assetType : secondList) {
+            if (assetType.getTypeId()==secondTypeName){
+                TbAssetTypeExample typeExample = new TbAssetTypeExample();
+                typeExample.createCriteria().andParentIdEqualTo(assetType.getTypeId());
+                list = assetTypeMapper.selectByExample(typeExample);
+                break;
+            }
+        }
+        return list;
+    }
+
+    /**
+     * 新增资产信息
+     * @param asset
+     */
+    @Override
+    public void assetAdd(TbAsset asset) {
+        if (asset.getPurchaseNumber()!=null){
+            asset.setTotalMoney(asset.getPrice().multiply(new BigDecimal(asset.getPurchaseNumber())));
+        }else{
+            asset.setTotalMoney(asset.getPrice());
+        }
+        asset.setUsableFlag(0);
+        asset.setLastUpdateTime(new Date());
+        if (asset.getId()!=null){
+            tbAssetMapper.updateByPrimaryKey(asset);
+        }else{
+            tbAssetMapper.insert(asset);
+        }
+
+    }
+
+    /**
+     * 根据id查找资产信息
+     * @param id
+     * @return
+     */
+    @Override
+    public TbAsset findOne(Integer id) {
+        return tbAssetMapper.selectByPrimaryKey(id);
+    }
+
+    /**
+     * 查找单个资产信息的资产类别以及其他资产信息
+     * @param asset
+     * @return
+     */
+    @Override
+    public AssetMsgs findAssetMsgs(TbAsset asset) {
+        List list = new ArrayList<>();
+        AssetMsgs assetMsgs = new AssetMsgs();
+        assetMsgs.setAsset(asset);
+        //找出该资产的二级所属类型
+        Integer parentId=assetTypeMapper.selectParentIdById(asset.getTypeId());
+        TbAssetTypeExample example = new TbAssetTypeExample();
+        example.createCriteria().andTypeIdEqualTo(parentId);
+        TbAssetType assetType=assetTypeMapper.selectByExample(example).get(0);
+        assetMsgs.setAssetType(assetType);
+        return assetMsgs;
+    }
+
+    /**
+     * 修改资产状态
+     * @param id
+     * @param useableFlag
+     */
+    @Override
+    public void del(Integer id, Integer useableFlag) {
+        TbAsset asset = tbAssetMapper.selectByPrimaryKey(id);
+        if (useableFlag == 0) {
+            asset.setUsableFlag(1);
+        } else {
+            asset.setUsableFlag(0);
+        }
+        asset.setLastUpdateTime(new Date());
+        tbAssetMapper.updateByPrimaryKey(asset);
     }
 }

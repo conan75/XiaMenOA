@@ -4,7 +4,22 @@
 
 <html>
 <head>
-    <title>课表管理页面</title>
+    <title>行政管理页面</title>
+    <script src="../plugins/jQuery/jquery-2.2.3.min.js"></script>
+    <link rel="stylesheet" href="../plugins/select2/select2.css" />
+    <link rel="stylesheet" href="../plugins/select2/select2-bootstrap.css" />
+    <script src="../plugins/select2/select2.min.js" type="text/javascript"></script>
+    <script type="text/javascript" src="../plugins/angularjs/angular.min.js"/>
+    <script type="text/javascript" src="../js/base_pagination.js"></script>
+    <script type="text/javascript" src="../js/angular-select2.js">  </script>
+    <script type="text/javascript" src="../js/service/assetService.js"></script>
+    <script type="text/javascript" src="../js/controller/baseController.js"></script>
+    <script type="text/javascript" src="../js/controller/assetController.js"></script>
+
+    <!-- 分页组件开始 -->
+    <script src="../plugins/angularjs/pagination.js"></script>
+    <link rel="stylesheet" href="../plugins/angularjs/pagination.css">
+    <!-- 分页组件结束 -->
     <style>
 
         .line-limit-length {
@@ -27,7 +42,7 @@
 
     </style>
 </head>
-<body>
+<body ng-app="XiaMenOA" ng-controller="assetController">
 <div class="hrms_container">
     <!-- 导航条 -->
     <%@ include file="./commom/head.jsp"%>
@@ -65,22 +80,29 @@
                                     </th>
                                     <th>
                                         <input type="text" id="asset_code" class="form-control"
-                                               name="assetCode" value="${assetSearch.assetCode}" placeholder="如：XM-CP-002">
+                                               ng-model="searchEntity.assetCode" placeholder="如：XM-CP-002">
                                     </th>
                                     <th>
                                         <label for="asset_name" class="control-label">资产名称:</label>
                                     </th>
                                     <th>
                                         <input type="text" id="asset_name" class="form-control"
-                                               name="assetName" value="${assetSearch.assetName}" placeholder="如:显示器">
+                                               ng-model="searchEntity.assetName" placeholder="如:显示器">
                                     </th>
                                     <th>
                                         <label for="useDepartment" class="control-label">使用部门:</label>
                                     </th>
                                     <th>
-                                        <select id="useDepartment" class="form-control" name="useDepartment">
+                                        <select id="useDepartment" class="form-control" ng-model="searchEntity.useDepartment">
                                             <option value="-1">--请选择--</option>
-                                            <option value="人事行政部" <c:if test="${assetSearch.useDepartment=='人事行政部'}">selected</c:if>>人事行政部</option>
+                                            <option value="厦门校区人事行政部" >厦门校区人事行政部</option>
+                                            <option value="厦门校区校办">厦门校区校办</option>
+                                            <option value="厦门校区财务部">厦门校区财务部</option>
+                                            <option value="厦门校区咨询部">厦门校区咨询部</option>
+                                            <option value="厦门校区学工部">厦门校区学工部</option>
+                                            <option value="厦门校区就业服务部JavaEE组">厦门校区就业服务部JavaEE组</option>
+                                            <option value="厦门校区就业服务部">厦门校区就业服务部</option>
+                                            <option value="厦门校区教研部JavaEE组">厦门校区教研部JavaEE组</option>
                                         </select>
                                     </th>
 
@@ -89,7 +111,7 @@
                                     </th>
                                     <th>
                                         <input type="text" id="usePerson" class="form-control"
-                                               name="usePerson" value="${assetSearch.usePerson}">
+                                               ng-model="searchEntity.usePerson">
                                     </th>
                                 </tr>
                                 <tr>
@@ -97,32 +119,29 @@
                                         <label for="typeName" class="control-label">一级资产类型:</label>
                                     </th>
                                     <th>
-                                        <select id="typeName" class="form-control" name="typeName">
+                                        <select id="typeName" class="form-control" ng-model="searchEntity.typeName">
                                             <option value="-1">--请选择--</option>
-                                            <option value="固定资产" <c:if test="${assetSearch.typeName=='固定资产'}">selected</c:if>>固定资产</option>
-                                            <option value="低值资产" <c:if test="${assetSearch.typeName=='低值资产'}">selected</c:if>>低值资产</option>
+                                            <option value="固定资产">固定资产</option>
+                                            <option value="低值资产">低值资产</option>
                                         </select>
                                     </th>
                                     <th>
                                         <label class="control-label">购置时间:</label>
                                     </th>
                                     <th>
-                                            <input type="date" id="startDate" class="form-control"
-                                                   name="startDate" value="${assetSearch.startDate}">
+                                            <input type="date" id="startDate" class="form-control" ng-model="searchEntity.startDate">
                                     </th>
                                     <th align="center">
                                             至
                                     </th>
                                     <th>
-                                            <input type="date" id="endDate" class="form-control"
-                                                   name="startDate" value="${assetSearch.endDate}">
+                                            <input type="date" id="endDate" class="form-control" ng-model="searchEntity.endDate">
                                     </th>
                                     <th>
                                         <label for="modelNum" class="control-label">规格型号:</label>
                                     </th>
                                     <th>
-                                        <input type="text" id="modelNum" class="form-control"
-                                               name="modelNum" value="${assetSearch.modelNum}" placeholder="如：i3-710 8G 250G">
+                                        <input type="text" id="modelNum" class="form-control" ng-model="searchEntity.modelNum" placeholder="如：i3-710 8G 250G">
                                     </th>
                                 </tr>
                                 <tr>
@@ -130,20 +149,25 @@
                                         <label for="useStatus" class="control-label">使用状态:</label>
                                     </th>
                                     <th>
-                                        <select id="useStatus" class="form-control" name="useStatus">
+                                        <select id="useStatus" class="form-control" ng-model="searchEntity.useStatus">
                                             <option value="-1">--请选择--</option>
-                                            <option value="0" <c:if test="${assetSearch.useStatus==0}">selected</c:if>>未使用</option>
-                                            <option value="1" <c:if test="${assetSearch.useStatus==1}">selected</c:if>>已使用</option>
+                                            <option value="0">未使用</option>
+                                            <option value="1">已使用</option>
                                         </select>
                                     </th>
                                     <th>
-                                        <input type="submit" value="查询" class="btn btn-primary form-control">
+                                        <input type="button" value="查询" ng-click="searchPage(paginationConf.currentPage, paginationConf.itemsPerPage)" class="btn btn-primary form-control">
                                     </th>
                                     <th colspan="4">
 
                                     </th>
                                     <th style="padding-left: 100px">
-                                        <input id="asset_change" type="button" value="初始化" class="btn btn-primary form-control" onclick="showImport()">
+                                        <table>
+                                            <tr>
+                                                <th> <a href="#" role="button" class="btn btn-primary assetMsg_add_btn" data-toggle="modal" ng-click="assetEdit={}" data-target=".assetMsg-add-modal">添加资产</a></th>
+                                                <th><input id="asset_change" type="button" value="初始化" class="btn btn-primary form-control" ng-click="showImport()"></th>
+                                            </tr>
+                                        </table>
                                     </th>
                                 </tr>
                             </table>
@@ -173,88 +197,36 @@
                         <th>操作</th>
                     </thead>
                     <tbody>
-                        <c:forEach items="${assets.list}" var="assetMsg" varStatus="status">
-                            <tr>
-                                <td>${assetMsg.asset.assetCode}</td>
-                                <td>${assetMsg.asset.serialNum}</td>
-                                <td class="line-limit-length">${assetMsg.assetType.typeName}</td>
-                                <td class="line-limit-length">${assetMsg.asset.typeName}</td>
-                                <td>${assetMsg.asset.assetName}</td>
-                                <td>${assetMsg.asset.modelNum}</td>
-                                <td>${assetMsg.asset.unit}</td>
-                                <td>${assetMsg.asset.purchaseNumber}</td>
-                                <td>${assetMsg.asset.price}</td>
-                                <td>${assetMsg.asset.totalMoney}</td>
-                                <td class="line-limit-length"><fmt:formatDate value="${assetMsg.asset.purchaseDate}" pattern="yyyy年MM月dd日"/></td>
-                                <td>${assetMsg.asset.useDepartment}</td>
-                                <td>${assetMsg.asset.usePerson}</td>
-                                <td>${assetMsg.asset.useStatus}</td>
-                                <td>${assetMsg.asset.remarks}</td>
-                                <td>${assetMsg.asset.depositPlace}</td>
+                            <tr ng-repeat="entity in list">
+                                <td>{{entity.asset.assetCode}}</td>
+                                <td>{{entity.asset.serialNum}}</td>
+                                <td class="line-limit-length">{{entity.assetType.typeName}}</td>
+                                <td class="line-limit-length">{{entity.asset.typeName}}</td>
+                                <td>{{entity.asset.assetName}}</td>
+                                <td>{{entity.asset.modelNum}}</td>
+                                <td>{{entity.asset.unit}}</td>
+                                <td>{{entity.asset.purchaseNumber}}</td>
+                                <td>{{entity.asset.price}}</td>
+                                <td>{{entity.asset.totalMoney}}</td>
+                                <td class="line-limit-length">{{entity.asset.purchaseDate|date:'yyyy年MM月dd日'}}</td>
+                                <td>{{entity.asset.useDepartment}}</td>
+                                <td>{{entity.asset.usePerson}}</td>
                                 <td>
-                                    <a href="#" role="button" class="btn btn-primary asset_edit_btn" value="${assetMsg.asset.id}" data-toggle="modal" data-target=".asset-update-modal">编辑</a>
-                                    <c:if test="${assetMsg.asset.usableFlag==0}">
-                                        <a href="#" role="button" class="btn btn-danger asset_delete_btn"  onclick="asset_delete('${assetMsg.asset.id}','${assetMsg.asset.usableFlag}')">停用</a>
-                                    </c:if>
-                                    <c:if test="${assetMsg.asset.usableFlag!=0}">
-                                        <a href="#" role="button" class="btn btn-primary asset_delete_btn" onclick="asset_delete('${assetMsg.asset.id}','${assetMsg.asset.usableFlag}')">启用</a>
-                                    </c:if>
+                                    {{entity.asset.useStatus==0?"未使用":"已使用"}}
+                                </td>
+                                <td>{{entity.asset.remarks}}</td>
+                                <td>{{entity.asset.depositPlace}}</td>
+                                <td>
+                                    <a href="#" role="button" class="btn btn-primary asset_edit_btn" ng-click="asset_Edit(entity.asset.id)" data-toggle="modal" data-target=".assetMsg-add-modal">编辑</a>
+                                    <a href="#" role="button" class="btn btn-primary asset_delete_btn"  ng-click="asset_Delete(entity.asset.id,entity.asset.usableFlag)">{{entity.asset.usableFlag==0?"停用":"启用"}}</a>
                                 </td>
                             </tr>
-                        </c:forEach>
                     </tbody>
                 </table>
             </div><!-- /.panel panel-success -->
             <!--显示分页信息-->
-            <%--<div class="row">
-                <!--文字信息-->
-                <div class="col-md-6">
-                    当前第 ${assets.pageNum} 页.总共 ${assets.pages} 页.一共 ${assets.total} 条记录
-                </div>
-
-                <!--点击分页-->
-                <div class="col-md-6">
-                    <nav aria-label="Page navigation">
-                        <ul class="pagination">
-
-                            <li><a href="/asset/findByPage.do">首页</a></li>
-
-                            <!--上一页-->
-                            <li>
-                                <c:if test="${assets.hasPreviousPage}">
-                                    <a href="/asset/findByPage.do?pn=${assets.pageNum-1}" aria-label="Previous">
-                                        <span aria-hidden="true">«</span>
-                                    </a>
-                                </c:if>
-                            </li>
-
-                            <!--循环遍历连续显示的页面，若是当前页就高亮显示，并且没有链接-->
-                            <c:forEach items="${assets.navigatepageNums}" var="page_num">
-                                <c:if test="${page_num == assets.pageNum}">
-                                    <li class="active"><a href="#">${page_num}</a></li>
-                                </c:if>
-                                <c:if test="${page_num != assets.pageNum}">
-                                    <li><a href="/asset/findByPage.do?pn=${page_num}">${page_num}</a></li>
-                                </c:if>
-                            </c:forEach>
-
-                            <!--下一页-->
-                            <li>
-                                <c:if test="${assets.hasNextPage}">
-                                    <a href="/asset/findByPage.do?pn=${assets.pageNum+1}"
-                                       aria-label="Next">
-                                        <span aria-hidden="true">»</span>
-                                    </a>
-                                </c:if>
-                            </li>
-
-                            <li><a href="/asset/findByPage.do?pn=${assets.pages}">尾页</a></li>
-                        </ul>
-                    </nav>
-                </div>
-            </div>--%>
-        </div><!-- /.emp_info -->
-
+            <tm-pagination conf="paginationConf"></tm-pagination>
+        </div><!-- /.dept_info -->
 
         <!-- 尾部 -->
         <%@ include file="./commom/foot.jsp"%>
@@ -262,25 +234,13 @@
 
 
 </div><!-- /.container -->
-<%--<%@ include file="bugMsgAdd.jsp"%>--%>
 <%@ include file="assetAdd.jsp"%>
-<%--<%@ include file="courseUpdate.jsp"%>--%>
+
 
 
 <script>
 
-    <!-- 展示初始化框 -->
-    function showImport(){
-        if($("#asset_change").val()=="初始化"){
-            document.getElementById("assetDiv-first").style.display ="";
-            $("#asset_change").val("隐藏");
-        }else{
-            document.getElementById("assetDiv-first").style.display ="none";
-            $("#asset_change").val("初始化");
-        }
-    }
-
-    <!-- ==========================课表删除操作=================================== -->
+    <!-- ==========================资产删除操作=================================== -->
     function asset_delete(id,num) {
         var curPageNo = ${assets.pageNum};
         var flag;

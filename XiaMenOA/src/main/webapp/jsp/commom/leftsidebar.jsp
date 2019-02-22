@@ -64,7 +64,7 @@
         if($("#loginUser").val()!="zhangsan"){
             alert("权限不足")
         }else{
-            $(this).attr("href", "/asset/findByPage.do");
+            $(this).attr("href", "/jsp/assetPage.jsp");
         }
     });
 
